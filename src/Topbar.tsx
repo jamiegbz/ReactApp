@@ -4,17 +4,60 @@
 //update
 
 import TopbarButton from "./TopbatButton";
-import RemoveButton from "./assets/delete-button.svg";
 import UpdateButton from "./assets/updateButton.svg";
 import AddButton from "./assets/addButton.png";
+import { Button, Modal, Stack } from "react-bootstrap";
+import { useState } from "react";
+import type { List } from "./types";
 
-export default function Topbar(){
-    return (
-        <div className="bg-secondary p-3 border-bottom">
-            <TopbarButton icon={UpdateButton} onClick={() => alert("update button")}/>
-            <TopbarButton icon={AddButton} onClick={() => alert("add button")}/>
-            <TopbarButton icon={RemoveButton} onClick={() => alert('remove button')}/>
-        </div>
-    )
+
+type TopbarProps = {
+    addList: () => void
+    updatePurchase: (purchase: string, id?: number) => void
+    selectedList?: List
 }
+
+export default function Topbar({ 
+    addList, 
+    updatePurchase, 
+    selectedList 
+}: TopbarProps){
+    const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false)
+
+    const handleClose = () => setIsPurchaseModalOpen(false)
+
+
+    return (
+        <>
+            <div className="bg-secondary p-3 border-bottom">
+                <TopbarButton icon={UpdateButton} onClick={() => setIsPurchaseModalOpen(true)}/>
+                <TopbarButton icon={AddButton} onClick={addList}/>
+            </div>
+            <Modal show={isPurchaseModalOpen} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Purchase Made?</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Stack direction="horizontal" gap={1}>
+                        <Button 
+                        variant={selectedList?.purchase === "Purchased" ? "success" : "outline-success"}
+                        onClick={() => updatePurchase( "Purchased", selectedList?.id)}> 
+                        Purchased </Button>
+                        <Button 
+                        variant={selectedList?.purchase === "Want" ? "danger" : "outline-danger"}
+                        onClick={() => updatePurchase("Want", selectedList?.id,)}> 
+                        Want </Button>
+                    </Stack>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="outline-primary" onClick={handleClose}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+   );
+ }
+ 
+
 
