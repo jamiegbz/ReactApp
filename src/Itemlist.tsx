@@ -1,14 +1,41 @@
 
+//import from startList.tsx
+import StartList from "./StartList"
+import type { List } from "./types"
 
 
-export default function ItemList({ list }: { list: { order: number }}){
-    return (
-     <div className="flex-grow-1 d-flex flex-column bg-info">
-       <span>{ list.order }</span>
-        <div> test item </div>
-        <div> test item </div>
+//props
+type ItemlistProp = {
+  lists: Array<List>
+  selectedListId : number
+  setSelectedListId: (newValue: number) => void
+  deleteList: (id: number) => void
+}
 
 
-     </div>
-    )
+export default function ItemList({
+  lists, 
+  selectedListId, 
+  setSelectedListId, 
+  deleteList
+}: ItemlistProp) {
+
+  const handleListClick = (id: number) => {
+    setSelectedListId(id)
+  }
+
+  return(
+    <div className="border-end bg-light p-5 d-flex flex-column">
+      {lists.map(l => 
+        <StartList 
+          key ={l.id} 
+          list={ l } 
+          onListSelected={handleListClick} 
+          isSelected={l.id === selectedListId}
+          deleteList={deleteList}
+          /> 
+          )}
+    </div>
+  )
+
 }
