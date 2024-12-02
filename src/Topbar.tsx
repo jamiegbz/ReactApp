@@ -6,9 +6,11 @@
 import TopbarButton from "./TopbatButton";
 import UpdateButton from "./assets/updateButton.svg";
 import AddButton from "./assets/addButton.png";
+import QuantityButton from "./assets/quantity.webp";
 import { Button, Modal, Stack } from "react-bootstrap";
 import { useState } from "react";
 import type { List } from "./types";
+import QuantityForm from "./quantityForm";
 
 
 type TopbarProps = {
@@ -23,8 +25,11 @@ export default function Topbar({
     selectedList 
 }: TopbarProps){
     const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false)
+    const [isTopbarOpen, setIsTopbarOpen] = useState(false)
 
     const handleClose = () => setIsPurchaseModalOpen(false)
+    const handleTopbarClose = () => setIsTopbarOpen(false)
+
 
 
     return (
@@ -32,6 +37,7 @@ export default function Topbar({
             <div className="bg-secondary p-3 border-bottom">
                 <TopbarButton icon={UpdateButton} onClick={() => setIsPurchaseModalOpen(true)}/>
                 <TopbarButton icon={AddButton} onClick={addList}/>
+                <TopbarButton icon={QuantityButton} onClick={() => setIsTopbarOpen(true)}/>
             </div>
             <Modal show={isPurchaseModalOpen} onHide={handleClose}>
                 <Modal.Header closeButton>
@@ -50,10 +56,22 @@ export default function Topbar({
                     </Stack>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="outline-primary" onClick={handleClose}>
+                    <Button variant="outline-primary" onClick={handleTopbarClose}>
                         Close
                     </Button>
                 </Modal.Footer>
+            </Modal>
+            <Modal show={isTopbarOpen} onHide={() => setIsTopbarOpen(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Purchased Item & Quantity</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <QuantityForm 
+                        updatePurchase={updatePurchase} 
+                        selectedList={selectedList}
+                        handleClose={handleTopbarClose}
+                    />
+                </Modal.Body>
             </Modal>
         </>
    );
