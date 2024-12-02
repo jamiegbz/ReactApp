@@ -3,6 +3,7 @@
 //updated
 ///toolbar
 
+
 import { useState } from "react"
 
 
@@ -20,8 +21,10 @@ export default function ItemCard(){
             {isExpanded ? (
                 <div
                     className=" bg-light p-3 border-bottom"
+                    
                     >
-                    SIDE BAR
+                        SHOPPING LIST:
+                        list all Items
                 </div>
                 
             ) : null }
