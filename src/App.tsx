@@ -6,7 +6,7 @@ import ItemCard from "./Sidebar";
 import Sidebar from "./Itemlist"
 import Topbar from "./Topbar";
 import EmptyCart from "./assets/emptyCart.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Purse from "./assets/Purse.webp";
 import Console from "./assets/console.avif";
 import Car from "./assets/BMWCar.avif"
@@ -19,21 +19,28 @@ const TEST_LIST = [
     order: 1,
     image: Purse,
     text: "purse",
-    purchase: "Bought"
+    purchase: "Bought",
+    store: "Amazon",
+    quantity: "1"
+
   },
   {
     id: 1,
     order: 2,
     image: Console,
     text: "Console",
-    purchase: "Bought"
+    purchase: "Bought",
+    store: "Best Buy",
+    quantity: "2"
   },
   {
     id: 2,
     order: 3,
     image: Car,
     text: "Car",
-    purchase: "Want"
+    purchase: "Want",
+    store: "Car Dealership",
+    quantity: "1"
   }
 ]
 
@@ -42,6 +49,13 @@ export default function App() {
 
   const[lists, setLists] = useState<Array<List>>(TEST_LIST)
   const [selectedListId, setSelectedListId] = useState(0)
+
+  //useEffect to change title
+  useEffect(() => {
+    document.title = `Shopping List (${lists.length})`
+    //syncs how many are in the list
+    //runs when length changes
+  }, [lists.length])
 
   const selectedList = lists.find(l => l.id === selectedListId)
 
@@ -52,7 +66,9 @@ export default function App() {
       order: 4,
       image: EmptyCart,
       text: "",
-      purchase: "Want"
+      purchase: "Want",
+      store: "None",
+      quantity: "0"
     }
 
     setLists( [ ...lists, blankList ] )
@@ -72,10 +88,10 @@ export default function App() {
       return
     }
 
-    setLists(lists.map(list => (
+    setLists(lists => lists.map(list => (
       list.id !== idToUpdate ? list : {
         ...list,
-        purchase: newPurchase
+        [newPurchase]: newPurchase
       }
     )))
 
